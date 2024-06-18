@@ -7,15 +7,17 @@ public class Book {
     private String title;
     private List<String> authors;
     private String isbn;
-    private boolean isAvailable;
-    private Patron borrowedBy;
+    private int totalCopies;
+    private int availableCopies;
+    private List<Patron> borrowedBy;
 
-    public Book(String title, List<String> authors, String isbn) {
+    public Book(String title, List<String> authors, String isbn, int copies) {
         this.title = title;
         this.authors = authors;
         this.isbn = isbn;
-        this.isAvailable = true;
-        this.borrowedBy = null;
+        this.totalCopies = copies;
+        this.availableCopies = copies;
+        this.borrowedBy = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -30,21 +32,27 @@ public class Book {
         return isbn;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public int getTotalCopies() {
+        return totalCopies;
+    }
+
+    public int getAvailableCopies() {
+        return availableCopies;
     }
 
     public void borrowBook(Patron patron) {
-        this.isAvailable = false;
-        this.borrowedBy = patron;
+        if (availableCopies > 0) {
+            availableCopies--;
+            borrowedBy.add(patron);
+        }
     }
 
-    public void returnBook() {
-        this.isAvailable = true;
-        this.borrowedBy = null;
+    public void returnBook(Patron patron) {
+        availableCopies++;
+        borrowedBy.remove(patron);
     }
 
-    public Patron getBorrowedBy() {
+    public List<Patron> getBorrowedBy() {
         return borrowedBy;
     }
 
@@ -54,8 +62,9 @@ public class Book {
                 "title='" + title + '\'' +
                 ", authors=" + authors +
                 ", isbn='" + isbn + '\'' +
-                ", isAvailable=" + isAvailable +
-                ", borrowedBy=" + (borrowedBy != null ? borrowedBy.getName() : "None") +
+                ", totalCopies=" + totalCopies +
+                ", availableCopies=" + availableCopies +
+                ", borrowedBy=" + borrowedBy +
                 '}';
     }
 }
