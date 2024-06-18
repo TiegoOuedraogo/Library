@@ -118,11 +118,33 @@ public class Library {
 
         // Command-line interaction loop
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("Available Actions: borrow, return, search, searchbyauthor, searchpartial, listallbooks, listborrowedbooks, register, switchpatron, newitem, quit");
-            System.out.print("Please enter your action: ");
-            String action = scanner.nextLine().trim().toLowerCase();
+        String[] actions = {
+            "borrow", "return", "search", "search by author", "search partial", 
+            "list all books", "list borrowed books", "register patron", 
+            "switch patron", "new item", "quit"
+        };
 
+        while (true) {
+            System.out.println("Available Actions:");
+            for (int i = 0; i < actions.length; i++) {
+                System.out.printf("%d: %s%n", i, actions[i]);
+            }
+
+            System.out.print("Please enter the number of your action: ");
+            int actionNumber;
+            try {
+                actionNumber = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                continue;
+            }
+
+            if (actionNumber < 0 || actionNumber >= actions.length) {
+                System.out.println("Invalid action number. Please try again.");
+                continue;
+            }
+
+            String action = actions[actionNumber];
             switch (action) {
                 case "borrow":
                     System.out.print("Enter the title of the book to borrow: ");
@@ -139,35 +161,35 @@ public class Library {
                     String searchTitle = scanner.nextLine();
                     library.searchBook(searchTitle);
                     break;
-                case "searchbyauthor":
+                case "search by author":
                     System.out.print("Enter the author to search: ");
                     String searchAuthor = scanner.nextLine();
                     library.searchByAuthor(searchAuthor);
                     break;
-                case "searchpartial":
+                case "search partial":
                     System.out.print("Enter the keyword to search: ");
                     String keyword = scanner.nextLine();
                     library.searchPartial(keyword);
                     break;
-                case "listallbooks":
+                case "list all books":
                     library.listAllBooks();
                     break;
-                case "listborrowedbooks":
+                case "list borrowed books":
                     library.listBorrowedBooks();
                     break;
-                case "register":
+                case "register patron":
                     System.out.print("Enter the name of the new patron: ");
                     String patronName = scanner.nextLine();
                     library.registerPatron(new Patron(patronName));
                     System.out.println("Patron registered successfully.");
                     break;
-                case "switchpatron":
+                case "switch patron":
                     System.out.print("Enter the name of the patron to switch to: ");
                     String switchPatronName = scanner.nextLine();
                     library.switchPatron(switchPatronName);
                     System.out.println("Switched to patron: " + switchPatronName);
                     break;
-                case "newitem":
+                case "new item":
                     System.out.print("Enter the type of item (book/cd/dvd): ");
                     String itemType = scanner.nextLine().trim().toLowerCase();
                     if ("book".equals(itemType)) {
